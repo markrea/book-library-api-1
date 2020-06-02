@@ -8,8 +8,8 @@ describe('/books', () => {
 
     describe('with no records in the database', () => {
         describe('POST /books', () => {
-            xit('creates a new book in the database', async () => {
-                const response = await (await request(app).post('/books')).send({
+            it('creates a new book in the database', async () => {
+                const response = await request(app).post('/books').send({
                     title: 'The Shining',
                     author: 'Stephen King',
                     genre: 'Horror',
@@ -18,7 +18,7 @@ describe('/books', () => {
                 const newBookRecord = await Book.findByPk(response.body.id, {
                     raw: true,
                 });
-                expect(response.status).toequal(201);
+                expect(response.status).to.equal(201);
                 expect(response.body.title).to.equal('The Shining');
                 expect(newBookRecord.title).to.equal('The Shining');
                 expect(newBookRecord.author).to.equal('Stephen King');
@@ -27,7 +27,7 @@ describe('/books', () => {
             });
         });
     });
-    describe('with records int he database', () => {
+    describe('with records in the database', () => {
         let books;
 
         beforeEach(async () => {
@@ -73,15 +73,15 @@ describe('/books', () => {
         });
 
         describe('GET /books/:id', () => {
-            xit('gets book records by id', async () => {
+            it('gets book records by id', async () => {
                 const book = books[0];
-                const response = await request(app).get(`/books/${books.id}`);
+                const response = await request(app).get(`/books/${book.id}`);
 
                 expect(response.status).to.equal(200);
                 expect(response.body.title).to.equal(book.title);
-                expect(response.author).to.equal(book.author);
-                expect(response.genre).to.equal(book.genre);
-                expect(response.isbn).to.equal(book.isbn);
+                expect(response.body.author).to.equal(book.author);
+                expect(response.body.genre).to.equal(book.genre);
+                expect(response.body.isbn).to.equal(book.isbn);
             });
 
             xit('returns a 404 if the book does not exist', async () => {
