@@ -26,6 +26,18 @@ describe('/readers', () => {
         expect(newReaderRecord.password).to.equal('secretpw');
       });
     });
+
+    it('sends a 400 error if name is an empty string', async () => {
+      const response = await request(app).post('/readers').send({
+        name: '',
+        email: 'noname@test.com',
+        password: 'secretpw',
+      });
+      const newReader = await Reader.findByPk(response.body.id, { raw: true, });
+      expect(response.status).to.equal(400);
+      expect(response.body.errors.length).to.equal(1);
+      expect(newReader).to.equal(null);
+    });
   });
 
   describe('with records in the database', () => {
@@ -38,9 +50,10 @@ describe('/readers', () => {
         Reader.create({
           name: 'Elizabeth Bennet',
           email: 'future_ms_darcy@gmail.com',
+          password: 'qwertyuiop'
         }),
-        Reader.create({ name: 'Arya Stark', email: 'vmorgul@me.com' }),
-        Reader.create({ name: 'Lyra Belacqua', email: 'darknorth123@msn.org' }),
+        Reader.create({ name: 'Arya Stark', email: 'vmorgul@me.com', password: 'secretpw' }),
+        Reader.create({ name: 'Lyra Belacqua', email: 'darknorth123@msn.org', password: 'supersecret' }),
       ]);
     });
 
