@@ -14,7 +14,7 @@
     "prestart": "node scripts/create-database.js",
     "start": "nodemon -r dotenv/config server.js",
     "pretest": "node scripts/create-database.js test",
-    "test": "NODE_ENV=test mocha tests/**/*.js --exit --recursive --timeout 60000 --file ./tests/test-setup.js",
+    "test": "NODE_ENV=test mocha tests/**/*.js --exit --recursive --timeout 6000 --file ./tests/test-setup.js",
     "posttest": "node scripts/drop-database.js"
   },
   "devDependencies": {
