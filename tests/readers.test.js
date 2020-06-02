@@ -38,6 +38,39 @@ describe('/readers', () => {
       expect(response.body.errors.length).to.equal(1);
       expect(newReader).to.equal(null);
     });
+    it('sends a 400 error if email is empty', async () => {
+      const response = await request(app).post('/readers').send({
+        name: 'A Name',
+        email: '',
+        password: 'secretpw',
+      });
+      const newReader = await Reader.findByPk(response.body.id, { raw: true, });
+      expect(response.status).to.equal(400);
+      expect(response.body.errors.length).to.equal(1);
+      expect(newReader).to.equal(null);
+    });
+    it('sends a 400 error if email is in the wrong format', async () => {
+      const response = await request(app).post('/readers').send({
+        name: 'A Name',
+        email: 'testemailgmail.com',
+        password: 'secretpw',
+      });
+      const newReader = await Reader.findByPk(response.body.id, { raw: true, });
+      expect(response.status).to.equal(400);
+      expect(response.body.errors.length).to.equal(1);
+      expect(newReader).to.equal(null);
+    });
+    it('sends a 400 error is too short', async () => {
+      const response = await request(app).post('/readers').send({
+        name: 'A Name',
+        email: 'testemail@gmail.com',
+        password: 'secret',
+      });
+      const newReader = await Reader.findByPk(response.body.id, { raw: true, });
+      expect(response.status).to.equal(400);
+      expect(response.body.errors.length).to.equal(1);
+      expect(newReader).to.equal(null);
+    });
   });
 
   describe('with records in the database', () => {
