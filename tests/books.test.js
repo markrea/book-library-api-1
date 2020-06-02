@@ -26,6 +26,52 @@ describe('/books', () => {
                 expect(newBookRecord.isbn).to.equal('9781444720723');
             });
         });
+        it('sends a 400 error if title is an empty string', async () => {
+            const response = await request(app).post('/books').send({
+                    title: '',
+                    author: 'Stephen King',
+                    genre: 'Horror',
+                    isbn: '9781444720723',
+            });
+            const newBook = await Book.findByPk(response.body.id, { raw: true, });
+            expect(response.status).to.equal(400);
+            expect(response.body.errors.length).to.equal(1);
+            expect(newBook).to.equal(null);
+        });
+        it('sends a 400 error if title is not input', async () => {
+            const response = await request(app).post('/books').send({
+                    author: 'Stephen King',
+                    genre: 'Horror',
+                    isbn: '9781444720723',
+            });
+            const newBook = await Book.findByPk(response.body.id, { raw: true, });
+            expect(response.status).to.equal(400);
+            expect(response.body.errors.length).to.equal(1);
+            expect(newBook).to.equal(null);
+        });
+        it('sends a 400 error if author is an empty string', async () => {
+            const response = await request(app).post('/books').send({
+                    title: 'The Shining',
+                    author: '',
+                    genre: 'Horror',
+                    isbn: '9781444720723',
+            });
+            const newBook = await Book.findByPk(response.body.id, { raw: true, });
+            expect(response.status).to.equal(400);
+            expect(response.body.errors.length).to.equal(1);
+            expect(newBook).to.equal(null);
+        });
+        it('sends a 400 error if title is not input', async () => {
+            const response = await request(app).post('/books').send({
+                    title: 'The Shining',
+                    genre: 'Horror',
+                    isbn: '9781444720723',
+            });
+            const newBook = await Book.findByPk(response.body.id, { raw: true, });
+            expect(response.status).to.equal(400);
+            expect(response.body.errors.length).to.equal(1);
+            expect(newBook).to.equal(null);
+        });
     });
     describe('with records in the database', () => {
         let books;

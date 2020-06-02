@@ -11,7 +11,12 @@ const createBook = (req, res) => {
 
     Book
         .create(newBook)
-        .then(newBookCreated => res.status(201).json(newBookCreated));
+        .then(newBookCreated => {res.status(201).json(newBookCreated)})
+        .catch((error) => {
+            const errorMessages = error.errors.map((e) => e.message);
+
+            return res.status(400).json({ errors: errorMessages });
+        });
 };
 
 const getBookById = (req, res) => {
