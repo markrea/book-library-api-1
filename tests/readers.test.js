@@ -21,6 +21,7 @@ describe('/readers', () => {
 
         expect(response.status).to.equal(201);
         expect(response.body.name).to.equal('Elizabeth Bennet');
+        expect(response.body.password).to.equal(undefined);
         expect(newReaderRecord.name).to.equal('Elizabeth Bennet');
         expect(newReaderRecord.email).to.equal('future_ms_darcy@gmail.com');
         expect(newReaderRecord.password).to.equal('secretpw');
@@ -102,7 +103,7 @@ describe('/readers', () => {
 
           expect(reader.name).to.equal(expected.name);
           expect(reader.email).to.equal(expected.email);
-          //expect(reader.password).to.equal('undefined');
+          expect(reader.password).to.equal(undefined);
         });
       });
     });
@@ -111,10 +112,11 @@ describe('/readers', () => {
       it('gets readers record by id', async () => {
         const reader = readers[0];
         const response = await request(app).get(`/readers/${reader.id}`);
-
+    
         expect(response.status).to.equal(200);
         expect(response.body.name).to.equal(reader.name);
         expect(response.body.email).to.equal(reader.email);
+        expect(response.body.password).to.equal(undefined);
       });
 
       it('returns a 404 if the reader does not exist', async () => {
