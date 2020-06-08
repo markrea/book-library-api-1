@@ -11,6 +11,6 @@ app.use(express.json());
 app.use('/readers', readerRouter);
 app.use('/books', bookRouter);
 app.use('/authors', authorRouter);
-app.use('/genre', genreRouter);
+app.use('/genres', genreRouter);
 
 module.exports = app;
