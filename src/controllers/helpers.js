@@ -19,16 +19,27 @@ const removePassword =(obj) => {
     return obj;
 };
 
-const getAllItems = (res, model) => {
-    const Model = getModel(model);
+const getOptions = (model) => {
+    if (model === 'book') return { include: [{ model: Genre }, { model: Author }] };
+    if (model === 'genre') return { include: Book };
+    if (model === 'author') return { include: Book};
+  
+    return {};
+  };
+  
 
-  return Model.findAll().then((items) => {
-      const itemsWithoutPassword = items.map((item) => 
-      removePassword(item.dataValues)
+  const getAllItems = (res, model) => {
+    const Model = getModel(model);
+    const options = getOptions(model);
+  
+    Model.findAll({ ...options }).then((items) => {
+      const itemsWithoutPassword = items.map((item) =>
+        removePassword(item.dataValues)
       );
       res.status(200).json(itemsWithoutPassword);
-  });
-};
+    });
+  };
+  
 const createItem = (res, model, item) => {
     const Model = getModel(model);
 
@@ -64,19 +75,17 @@ const updateItem = (res, model, item, id) => {
 
 const getItemById = (res, model, id) => {
     const Model = getModel(model);
-
-    return Model.findByPk(id).then(foundItem => {
-        
-        if(!foundItem) {
-            res.status(404).json(get404Error(model));
-        } else {
-            const itemWithoutPassword = removePassword(foundItem.dataValues)
-
-            res.status(200).json(itemWithoutPassword);
-        };
+    const options = getOptions(model);
+  
+    Model.findByPk(id, { ...options }).then((item) => {
+      if (!item) {
+        res.status(404).json(get404Error(model));
+      } else {
+        const itemWithoutPassword = removePassword(item.dataValues);
+        res.status(200).json(itemWithoutPassword);
+      }
     });
-};
-
+  };
 const deleteItem = (res, model, id) => {
     const Model = getModel(model);
 

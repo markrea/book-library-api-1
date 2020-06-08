@@ -14,22 +14,10 @@ module.exports = (sequelize, DataTypes) => {
             },
         },
     },
-        author: {
+    
+        isbn:{
             type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-            notNull: {
-                args: [true],
-                msg: 'We need an author',
-            },
-            notEmpty: {
-                args: [true],
-                     msg: 'Author must not be empty'
-            },
         },
-        },
-        genre: DataTypes.STRING,
-        isbn: DataTypes.STRING,
     };
 
     return sequelize.define('Book', schema);
