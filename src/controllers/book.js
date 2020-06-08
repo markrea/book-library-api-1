@@ -1,23 +1,14 @@
 const { Book } = require('../models');
 
-const getBooks = (_, res) => {
-    Book.findAll().then(books => {
-        res.status(200).json(books);
-    });
-};
+const {
+    getAllItems,
+    createItem,
+} = require('./helpers');
 
-const createBook = (req, res) => {
-    const newBook = req.body;
 
-    Book
-        .create(newBook)
-        .then(newBookCreated => {res.status(201).json(newBookCreated)})
-        .catch((error) => {
-            const errorMessages = error.errors.map((e) => e.message);
+const getBooks = (_, res) => getAllItems(res, 'book'); 
 
-            return res.status(400).json({ errors: errorMessages });
-        });
-};
+const createBook = (req, res) => createItem(res, 'book', req.body); 
 
 const getBookById = (req, res) => {
     const { id } = req.params;

@@ -1,23 +1,14 @@
 const { Reader } = require('../models');
 
-const getReaders = (_, res) => {
-  Reader.findAll().then(readers => {
-    res.status(200).json(readers);
-  });
-}
+const {
+  getAllItems,
+  createItem,
+} = require('./helpers');
 
-const createReader = (req, res) => {
-  const newReader = req.body;
+const getReaders = (_, res) => getAllItems(res, 'reader');
 
-  Reader
-    .create(newReader)
-    .then(newReaderCreated => {res.status(201).json(newReaderCreated)})
-    .catch((error) => {
-      const errorMessages = error.errors.map((e) => e.message);
 
-      return res.status(400).json({ errors: errorMessages });
-    });
-}
+const createReader = (req, res) => createItem(res, 'reader', req.body);
 
 
 const updateReader = (req, res) => {
