@@ -10,6 +10,7 @@ const getModel = (model) => {
     return models[model];
 };
 
+
 const getAllItems = (res, model) => {
     const Model = getModel(model);
 
@@ -46,8 +47,40 @@ const updateItem = (res, model, item, id) => {
         };
     });
 };
+
+const getItemById = (res, model, id) => {
+    const Model = getModel(model);
+
+    return Model.findByPk(id).then(foundItem => {
+        if(!foundItem) {
+            res.status(404).json(get404Error(model));
+        } else {
+            res.status(200).json(foundItem);
+        };
+    });
+};
+
+const deleteItem = (res, model, id) => {
+    const Model = getModel(model);
+
+    return Model
+    .findByPk(id)
+    .then(foundItem => {
+        if(!foundItem) {
+            res.status(404).json(get404Error(model));
+        } else {
+            Model
+            .destroy({ where: { id } })
+            .then(() => {
+                res.status(204).send();
+            });
+        };
+    });
+};
 module.exports = {
     createItem,
     getAllItems,
     updateItem,
+    getItemById,
+    deleteItem,
 }
