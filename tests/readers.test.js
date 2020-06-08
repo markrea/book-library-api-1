@@ -133,7 +133,6 @@ describe('/readers', () => {
         const updatedReaderRecord = await Reader.findByPk(reader.id, {
           raw: true,
         });
-
         expect(response.status).to.equal(200);
         expect(updatedReaderRecord.email).to.equal('miss_e_bennet@gmail.com');
       });

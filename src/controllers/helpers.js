@@ -29,8 +29,25 @@ const createItem = (res, model, item) => {
 
             return res.status(400).json({ errors: errorMessages});
         });
-}
+};
+
+const updateItem = (res, model, item, id) => {
+   const Model = getModel(model);
+
+    return Model
+    .update(item, { where: { id } })
+    .then(([recordsUpdated]) => {
+        if(!recordsUpdated) {
+            res.status(404).json(get404Error(model));
+        } else {
+            getModel(model).findByPk(id).then((updatedItem) => {
+                res.status(200).json(updatedItem)
+            });
+        };
+    });
+};
 module.exports = {
     createItem,
     getAllItems,
+    updateItem,
 }
